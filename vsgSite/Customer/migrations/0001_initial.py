@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('programName', models.CharField(max_length=200)),
                 ('bridgeIP', models.CharField(max_length=200)),
                 ('bridge', models.CharField(max_length=200)),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='vsgLicense.customer')),
+                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Customer.customer')),
             ],
         ),
     ]
