@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import loader
 from .models import Customer, Node
+
 
 def index(request):
     latest_customer_list = Customer.objects.order_by('-add_date')[:5]
-    output = ', '.join([q.custName_text for q in latest_customer_list])
-    return HttpResponse(output)
+    template = loader.get_template('Customer/index.html')
+    context = {
+        'latest_customer_list': latest_customer_list,
+    }
+    return HttpResponse(template.render(context, request))
 
 def detail(request, customer_id):
     return HttpResponse("You're looking at customer %s." % customer_id)

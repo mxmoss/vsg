@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customers</title>
+
+    {% if latest_customer_list %}
+        <ul>
+        {% for customer in latest_customer_list %}
+            <li><a href="/Customer/{{ customer.id }}/">{{ customer.custName_text }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No customers are available.</p>
+    {% endif %}
+
+</head>
+<body>
+
+</body>
+</html>
