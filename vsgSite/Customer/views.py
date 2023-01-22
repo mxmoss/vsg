@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from .models import Customer, Node
 
@@ -9,7 +9,8 @@ def index(request):
 
 
 def detail(request, customer_id):
-    return HttpResponse("You're looking at customer %s." % customer_id)
+    customer = get_object_or_404(Customer, pk=customer_id)
+    return render(request, 'Customer/detail.html', {'customer': customer})
 
 def results(request, customer_id):
     response = "You're looking at the nodes for customer %s."
