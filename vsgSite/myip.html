@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Get External IP</title>
+</head>
+<body onpageshow="getIPFromAmazon()">
+<p id="demo"></p>
+My IP is <input type="text" name="myip" id="myip" name="my ip" value="asd" />
+
+<script>
+function getIPFromAmazon() {
+  myURL = "https://checkip.amazonaws.com/";
+  myURL = "https://ipinfo.io/ip";
+  fetch(myURL,
+      { headers: {'Content-Type': 'Access-Control-Allow-Origin'}, mode: 'cors', credentials: 'same-origin'})
+    .then(res => res.text())
+    .then(data => document.getElementById("myip").value = data)
+	
+}
+
+function myIP() {
+  document.getElementById("myip").value = getIPFromAmazon();
+}
+
+document.getElementById("myip").onload = function() {getIPFromAmazon()};
+</script>
+
+</body>
+</html>
