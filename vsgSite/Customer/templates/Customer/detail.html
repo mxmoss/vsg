@@ -9,10 +9,19 @@
         <li>License: {{ customer.licenseId_text }}</li>
         <li>Added {{ customer.add_date }}</li>
     </ul>
+    My IP <input type="text" id="my ip" name="my ip" value="40.34.34.23"/>
     <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
     {% csrf_token %}
-    <button type="submit">Launch</button>
-</form>
+    License: Basic <button type="submit">Launch</button>
+    </form>
+    <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
+    {% csrf_token %}
+    License: Basic2 <button type="submit">Launch</button>
+    </form>
+    <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
+    {% csrf_token %}
+    License: Basic+Slomo <button type="submit">Launch</button>
+    </form>
 </head>
 <body>
 
