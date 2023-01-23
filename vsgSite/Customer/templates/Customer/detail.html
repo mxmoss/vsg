@@ -9,6 +9,10 @@
         <li>License: {{ customer.licenseId_text }}</li>
         <li>Added {{ customer.add_date }}</li>
     </ul>
+    <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
+    {% csrf_token %}
+    <button type="submit">Launch</button>
+</form>
 </head>
 <body>
 

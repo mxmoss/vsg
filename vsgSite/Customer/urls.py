@@ -10,5 +10,5 @@ urlpatterns = [
     path('<int:customer_id>/', views.detail, name='detail'),
     path('<int:customer_id>/results/', views.results, name='results'),
     path('<int:customer_id>/spinup/', views.spinup, name='spinup'),
-
 ]
+
