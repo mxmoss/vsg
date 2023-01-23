@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Customer Detail</title>
+</head>
+<body  onpageshow="getIPFromAmazon()">
     <h1>{{ customer.custName_text }}</h1>
     <ul>
         <li>ID {{ customer.custId_text }}</li>
         <li>License: {{ customer.licenseId_text }}</li>
         <li>Added {{ customer.add_date }}</li>
     </ul>
-    My IP <input type="text" id="my ip" name="my ip" value="40.34.34.23"/>
+    My IP <input type="text" id="myip" name="myip" value=""/>
     <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
     {% csrf_token %}
     License: Basic <button type="submit">Launch</button>
@@ -22,8 +24,22 @@
     {% csrf_token %}
     License: Basic+Slomo <button type="submit">Launch</button>
     </form>
-</head>
-<body>
 
+<script>
+function getIPFromAmazon() {
+  myURL = "https://checkip.amazonaws.com/";
+  myURL = "https://ipinfo.io/ip";
+  fetch(myURL,
+      { headers: {'Content-Type': 'Access-Control-Allow-Origin'}, mode: 'cors', credentials: 'same-origin'})
+    .then(res => res.text())
+    .then(data => document.getElementById("myip").value = data)
+
+}
+
+function myIP() {
+  document.getElementById("myip").value = getIPFromAmazon();
+}
+document.getElementById("myip").onload = function() {getIPFromAmazon()};
+</script>
 </body>
 </html>
