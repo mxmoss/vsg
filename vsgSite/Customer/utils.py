@@ -2,6 +2,8 @@ import os
 import platform
 import subprocess
 import tempfile
+import shutil
+
 
 def isWindows():
     return (platform.system() == 'Windows')
@@ -14,6 +16,9 @@ def tmpFileName(seed = None):
     if seed:
         suffix = '-' + seed + suffix
     return tempfile.TemporaryFile(suffix = suffix, prefix = 'AWSInstance')
+
+def CopyFile(src, dest):
+    shutil.copyfile(src, dest)
 
 def exec(command, params):
     #    os.path.abspath(os.path.dirname(__file__))
