@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from .models import Customer
 from .utils import *
+from django.conf import settings
+from vsgSite.settings import BASE_DIR, STATIC_URL
 
 def index(request):
     latest_customer_list = Customer.objects.order_by('-add_date')[:5]
@@ -15,13 +17,16 @@ def spinup(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
     customer_txt = str(customer_id)
     if request.POST:
-        fn = tmpFileName(customer_txt)
+        src = os.path.join(settings.STATIC_PATH,'AWSProxy.bat')
+        dest = tmpFileName(customer_txt)
+        dest.close()
+        CopyFile(src, dest.name)
         try:
-            exec(fn, customer_txt)
+            exec(dest.name, customer_txt)
         except:
             print("Something went wrong")
         finally:
-            os.remove(fn)
+            os.remove(dest.name)
     return render(request, 'Customer/detail.html', {'customer': customer})
 
 def results(request, customer_id):
