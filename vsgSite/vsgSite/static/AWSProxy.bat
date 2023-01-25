@@ -145,9 +145,9 @@ ssh -i %USERPROFILE%\key.pem ec2-user@%PUB_DNS% sudo yum -y install jq
 if %DEBUG%==1 pause
 
 rem === Open Page in browser
-start http://%PUB_DNS%
+rem start http://%PUB_DNS%
 
 rem === Start reverse proxy
 echo Starting Reverse Proxy
 echo ssh -i %USERPROFILE%\key.pem -R 8080:localhost:8080 ec2-user@%PUB_DNS% > startme.txt
-ssh -i %USERPROFILE%\key.pem -R 8080:localhost:8080 ec2-user@%PUB_DNS%
+rem ssh -i %USERPROFILE%\key.pem -R 8080:localhost:8080 ec2-user@%PUB_DNS%
