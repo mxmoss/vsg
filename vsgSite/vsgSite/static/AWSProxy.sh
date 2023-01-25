@@ -8,11 +8,13 @@ rm key-output.json;
 rm sg-output.json;
 rm ec2-output.json;
 rm instance.json;
-unset $MYIP;
 USERPROFILE=~
+MYKEYNAME="proxy-key-pair2"
+MYSECURITYGROUP="reverse-proxy2"
 
 # === Get public IP address either from this computer or as a parameter
 echo Getting Public IP Address;
+unset $MYIP;
 if [ -n "$1" ]
 then
   MYIP=$1;
@@ -48,7 +50,6 @@ rm $0.tmp
 
 # === Create a key pair
 echo Creating Key Pair
-MYKEYNAME="proxy-key-pair2"
 aws ec2 create-key-pair --key-name $MYKEYNAME  > key-output.json
 jq -r ".KeyPairId" key-output.json > $0.tmp
 KEYPAIRID=$(cat $0.tmp)
@@ -60,7 +61,6 @@ jq -r ".KeyMaterial" key-output.json > $USERPROFILE\key.pem
 
 # === Create a security group
 echo Creating a security Group
-MYSECURITYGROUP="reverse-proxy2"
 aws ec2 create-security-group --group-name $MYSECURITYGROUP --description reverse-proxy2 --vpc-id $VPCID > sg-output.json
 jq -r ".GroupId" sg-output.json > $0.tmp
 SGGROUPID=$(cat $0.tmp)
