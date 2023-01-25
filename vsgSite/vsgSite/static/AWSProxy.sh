@@ -64,7 +64,7 @@ echo $KEYPAIRID
 sleep 5
 rm $0.tmp
 # Create the key.pem file
-jq -r ".KeyMaterial" key-output.json > $USERPROFILE\key.pem
+jq -r ".KeyMaterial" key-output.json > $USERPROFILE/key.pem
 
 # === Create a security group
 echo Creating a security Group
@@ -137,12 +137,12 @@ sleep 5
 
 # === Update server
 echo Configuring server
-ssh -o StrictHostKeyChecking=no -i $USERPROFILE\key.pem ec2-user@$PUB_DNS sudo yum update -y
-ssh -i $USERPROFILE\key.pem ec2-user@$PUB_DNS sudo amazon-linux-extras install nginx1 -y
-scp -v -i $USERPROFILE\key.pem server.conf ec2-user@$PUB_DNS:/tmp
-ssh -i $USERPROFILE\key.pem ec2-user@$PUB_DNS sudo sed -i '/octet-stream;/a \\tserver_names_hash_bucket_size 128;' /etc/nginx/nginx.conf
-ssh -i $USERPROFILE\key.pem ec2-user@$PUB_DNS sudo mv /tmp/server.conf /etc/nginx/conf.d/
-ssh -i $USERPROFILE\key.pem ec2-user@$PUB_DNS sudo service nginx start
+ssh -o StrictHostKeyChecking=no -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo yum update -y
+ssh -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo amazon-linux-extras install nginx1 -y
+scp -v -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_DNS:/tmp
+ssh -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo sed -i '/octet-stream;/a \\tserver_names_hash_bucket_size 128;' /etc/nginx/nginx.conf
+ssh -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo mv /tmp/server.conf /etc/nginx/conf.d/
+ssh -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo service nginx start
 sleep 5
 
 # === Open Page in browser
@@ -150,4 +150,4 @@ sleep 5
 
 # === Start reverse proxy
 echo Starting Reverse Proxy
-echo ssh -i $USERPROFILE\key.pem -R 8080:localhost:8080 ec2-user@$PUB_DNS
+echo ssh -i $USERPROFILE/key.pem -R 8080:localhost:8080 ec2-user@$PUB_DNS
