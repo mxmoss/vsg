@@ -26,6 +26,13 @@ fi
 echo $MYIP;
 sleep 5;
 
+echo Getting This IP Address;
+curl -s https://checkip.amazonaws.com > $0.tmp;
+THISIP=$(cat $0.tmp);
+rm $0.tmp;
+echo $THISIP;
+sleep 5;
+
 # === Setting region
 echo Setting the region
 aws configure set region us-west-1
@@ -71,6 +78,7 @@ rm $0.tmp
 # === Configure security groups 
 echo Configuring security groups
 aws ec2 authorize-security-group-ingress --group-id $SGGROUPID --protocol tcp --port 22 --cidr $MYIP/32
+aws ec2 authorize-security-group-ingress --group-id $SGGROUPID --protocol tcp --port 22 --cidr $THISIP/32
 aws ec2 authorize-security-group-ingress --group-id $SGGROUPID  --protocol tcp --port 80 --cidr 0.0.0.0/0
 sleep 5
 
@@ -141,5 +149,5 @@ sleep 5
 # start http://$PUB_DNS
 
 # === Start reverse proxy
-echo Starting Rverse Proxy
-ssh -i $USERPROFILE\key.pem -R 8080:localhost:8080 ec2-user@$PUB_DNS
+echo Starting Reverse Proxy
+echo ssh -i $USERPROFILE\key.pem -R 8080:localhost:8080 ec2-user@$PUB_DNS
