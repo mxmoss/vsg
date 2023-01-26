@@ -136,9 +136,9 @@ echo "}	"		>> $OUTFILE
 echo "server {	"	>> $OUTFILE
 echo "  server_name $PUB_DNS;"	>> $OUTFILE
 echo "  location / {"	>> $OUTFILE
-echo "    proxy_set_header X-Real-IP $remote_addr;	"		>> $OUTFILE
-echo "    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;	" >> $OUTFILE
-echo "    proxy_set_header Host $http_host;"	>> $OUTFILE
+echo "    proxy_set_header X-Real-IP \$remote_addr;	"		>> $OUTFILE
+echo "    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;	" >> $OUTFILE
+echo "    proxy_set_header Host \$http_host;"	>> $OUTFILE
 echo "    proxy_redirect off;	"		>> $OUTFILE
 echo "    proxy_pass http://tunnel;	"	>> $OUTFILE
 echo "  }	"	>> $OUTFILE
@@ -164,4 +164,4 @@ sleep 5
 
 # === Start reverse proxy
 echo Starting Reverse Proxy
-echo ssh -i $USERPROFILE/key.pem -R 8080:localhost:8080 ec2-user@$PUB_DNS
+echo ssh -i $USERPROFILE/key.pem -R 8080:localhost:8080 ec2-user@$PUB_IP
