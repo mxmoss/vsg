@@ -9,6 +9,8 @@ erase ec2-output.json
 erase instance.json
 set DEBUG==0
 set MYIP=
+set MYKEYNAME=proxy-key-pair2
+set MYSECURITYGROUP=reverse-proxy2
 
 rem === Get public IP address either from this computer or as a parameter
 echo Getting Public IP Address
@@ -30,7 +32,6 @@ echo Setting the region
 aws configure set region us-west-1
 aws configure set cli_pager ""
 
-
 rem === Get the first VPC id
 echo Getting the VPC ID
 aws ec2 describe-subnets | jq -r ".Subnets[0] | (.VpcId)" > %0.tmp
@@ -50,7 +51,6 @@ erase %0.tmp
 
 rem === Create a key pair
 echo Creating Key Pair
-set MYKEYNAME=proxy-key-pair1
 aws ec2 create-key-pair --key-name %MYKEYNAME%  > key-output.json
 jq -r ".KeyPairId" key-output.json > %0.tmp
 set /p KEYPAIRID=<%0.tmp
@@ -62,7 +62,6 @@ jq -r ".KeyMaterial" key-output.json > %USERPROFILE%\key.pem
 
 rem === Create a security group
 echo Creating a security Group
-set MYSECURITYGROUP=reverse-proxy1
 aws ec2 create-security-group --group-name %MYSECURITYGROUP% --description reverse-proxy --vpc-id %VPCID% > sg-output.json
 jq -r ".GroupId" sg-output.json > %0.tmp
 set /p SGGROUPID=<%0.tmp
