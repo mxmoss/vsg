@@ -9,8 +9,8 @@ rm sg-output.json;
 rm ec2-output.json;
 rm instance.json;
 USERPROFILE=~
-MYKEYNAME="proxy-key-pair2"
-MYSECURITYGROUP="reverse-proxy2"
+MYKEYNAME="proxy-key-pair3"
+MYSECURITYGROUP="reverse-proxy3"
 
 # === Get public IP address either from this computer or as a parameter
 echo Getting Public IP Address;
@@ -64,12 +64,12 @@ echo $KEYPAIRID
 sleep 5
 rm $0.tmp
 # Create the key.pem file
-jq -r ".KeyMaterial" key-output.json > $USERPROFILE/key.pem
+sudo bash  -c "jq -r ".KeyMaterial" key-output.json > $USERPROFILE/key.pem"
 
 # === Create a security group
 echo Creating a security Group
 aws ec2 create-security-group --group-name $MYSECURITYGROUP --description reverse-proxy2 --vpc-id $VPCID > sg-output.json
-jq -r ".GroupId" sg-output.json > $0.tmp
+sudo bash  -c "jq -r ".GroupId" sg-output.json > $0.tmp"
 SGGROUPID=$(cat $0.tmp)
 echo $SGGROUPID
 sleep 5
@@ -86,7 +86,7 @@ sleep 5
 echo Creating the instance
 MYTAGS="ResourceType=instance,Tags=[{Key=Name,Value=ProxyOnDemandName}]"
 aws ec2 run-instances --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 --count 1 --instance-type t2.micro --key-name $MYKEYNAME --security-group-ids $SGGROUPID --subnet-id $SUBNETID --tag-specifications $MYTAGS > ec2-output.json
-jq -r ".Instances[] | .InstanceId" ec2-output.json> $0.tmp
+sudo bash  -c "jq -r ".Instances[] | .InstanceId" ec2-output.json> $0.tmp "
 EC2_ID=$(cat $0.tmp)
 echo $EC2_ID
 sleep 5
@@ -99,9 +99,17 @@ aws ec2 wait instance-status-ok --instance-ids $EC2_ID
 # === Get public DNS
 echo Getting public DNS
 aws ec2 describe-instances --instance-ids  $EC2_ID > instance.json
-jq -r ".Reservations []| .Instances [] | .PublicDnsName" instance.json > $0.tmp
+sudo bash  -c "jq -r ".Reservations []| .Instances [] | .PublicDnsName" instance.json > $0.tmp "
 PUB_DNS=$(cat $0.tmp)
 echo $PUB_DNS
+sleep 5
+rm $0.tmp
+
+# === Get public IP
+echo Getting public IP
+sudo bash  -c "jq -r ".Reservations []| .Instances [] | .PublicIpAddress" instance.json > $0.tmp"
+PUB_IP=$(cat $0.tmp)
+echo $PUB_IP
 sleep 5
 rm $0.tmp
 
@@ -137,12 +145,12 @@ sleep 5
 
 # === Update server
 echo Configuring server
-ssh -o StrictHostKeyChecking=no -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo yum update -y
-ssh -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo amazon-linux-extras install nginx1 -y
-scp -v -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_DNS:/tmp
-ssh -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo sed -i '/octet-stream;/a \\tserver_names_hash_bucket_size 128;' /etc/nginx/nginx.conf
-ssh -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo mv /tmp/server.conf /etc/nginx/conf.d/
-ssh -i $USERPROFILE/key.pem ec2-user@$PUB_DNS sudo service nginx start
+ssh -o StrictHostKeyChecking=no -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo yum update -y
+ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo amazon-linux-extras install nginx1 -y
+scp -v -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
+ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo sed -i '/octet-stream;/a \\tserver_names_hash_bucket_size 128;' /etc/nginx/nginx.conf
+ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
+ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo service nginx start
 sleep 5
 
 # === Open Page in browser
