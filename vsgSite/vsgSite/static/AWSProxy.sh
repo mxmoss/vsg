@@ -64,12 +64,12 @@ echo $KEYPAIRID
 sleep 5
 rm $0.tmp
 # Create the key.pem file
-sudo bash  -c "jq -r ".KeyMaterial" key-output.json > $USERPROFILE/key.pem"
+sudo bash  -c "jq -r '.KeyMaterial' key-output.json > $USERPROFILE/key.pem"
 
 # === Create a security group
 echo Creating a security Group
 aws ec2 create-security-group --group-name $MYSECURITYGROUP --description reverse-proxy2 --vpc-id $VPCID > sg-output.json
-sudo bash  -c "jq -r ".GroupId" sg-output.json > $0.tmp"
+sudo bash  -c "jq -r '.GroupId' sg-output.json > $0.tmp"
 SGGROUPID=$(cat $0.tmp)
 echo $SGGROUPID
 sleep 5
@@ -86,7 +86,7 @@ sleep 5
 echo Creating the instance
 MYTAGS="ResourceType=instance,Tags=[{Key=Name,Value=ProxyOnDemandName}]"
 aws ec2 run-instances --image-id resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 --count 1 --instance-type t2.micro --key-name $MYKEYNAME --security-group-ids $SGGROUPID --subnet-id $SUBNETID --tag-specifications $MYTAGS > ec2-output.json
-sudo bash  -c "jq -r ".Instances[] | .InstanceId" ec2-output.json> $0.tmp "
+sudo bash  -c "jq -r '.Instances[] | .InstanceId' ec2-output.json> $0.tmp "
 EC2_ID=$(cat $0.tmp)
 echo $EC2_ID
 sleep 5
@@ -99,7 +99,7 @@ aws ec2 wait instance-status-ok --instance-ids $EC2_ID
 # === Get public DNS
 echo Getting public DNS
 aws ec2 describe-instances --instance-ids  $EC2_ID > instance.json
-sudo bash  -c "jq -r ".Reservations []| .Instances [] | .PublicDnsName" instance.json > $0.tmp "
+sudo bash  -c "jq -r '.Reservations []| .Instances [] | .PublicDnsName' instance.json > $0.tmp "
 PUB_DNS=$(cat $0.tmp)
 echo $PUB_DNS
 sleep 5
@@ -107,7 +107,7 @@ rm $0.tmp
 
 # === Get public IP
 echo Getting public IP
-sudo bash  -c "jq -r ".Reservations []| .Instances [] | .PublicIpAddress" instance.json > $0.tmp"
+sudo bash  -c "jq -r '.Reservations []| .Instances [] | .PublicIpAddress' instance.json > $0.tmp"
 PUB_IP=$(cat $0.tmp)
 echo $PUB_IP
 sleep 5
