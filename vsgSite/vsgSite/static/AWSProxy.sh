@@ -115,7 +115,7 @@ sleep 5
 rm $0.tmp
 
 # === Create the teardown script to run later
-echo Creating AWSTeardown.sh                                                                                            
+echo Creating AWSTeardown                                                                                    
 OUTFILE="AWSTeardown.sh"
 echo $OUTFILE
 echo "#!/bin/bash" > $OUTFILE
@@ -124,8 +124,9 @@ echo "# wait for the instance to terminate"  >> $OUTFILE
 echo "aws ec2 wait instance-terminated --instance-ids $EC2_ID"  >> $OUTFILE
 echo "aws ec2 delete-key-pair --key-pair-id $KEYPAIRID"  >> $OUTFILE
 echo "aws ec2 delete-security-group --group-id $SGGROUPID"  >> $OUTFILE
-echo Run AWSTeardown.sh to clean up afterward
-  
+echo Run $OUTFILE to clean up afterward
+sudo chmod +x A$OUTFILE
+
 # === create /etc/nginx/conf.d/server.conf
 echo Creating server.conf
 OUTFILE="server.conf"
@@ -148,7 +149,7 @@ sleep 5
 echo Configuring server
 ssh -o StrictHostKeyChecking=no -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo yum update -y
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo amazon-linux-extras install nginx1 -y
-scp -v -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
+sudo scp -v -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo sed -i '/octet-stream;/a \\tserver_names_hash_bucket_size 128;' /etc/nginx/nginx.conf
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo service nginx start
