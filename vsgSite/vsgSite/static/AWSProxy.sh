@@ -155,6 +155,7 @@ sudo scp -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
 #sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo bash  -c 'sed -i "/octet-stream;/a    server_names_hash_bucket_size 128;" /etc/nginx/nginx.conf'
 echo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
+echo Restarting nginx
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo service nginx start
 sleep 5
 
