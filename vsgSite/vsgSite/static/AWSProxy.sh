@@ -125,7 +125,7 @@ echo "aws ec2 wait instance-terminated --instance-ids $EC2_ID"  >> $OUTFILE
 echo "aws ec2 delete-key-pair --key-pair-id $KEYPAIRID"  >> $OUTFILE
 echo "aws ec2 delete-security-group --group-id $SGGROUPID"  >> $OUTFILE
 echo Run $OUTFILE to clean up afterward
-sudo chmod +x A$OUTFILE
+sudo chmod +x $OUTFILE
 
 # === create /etc/nginx/conf.d/server.conf
 echo Creating server.conf
