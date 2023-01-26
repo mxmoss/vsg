@@ -65,6 +65,7 @@ sleep 5
 rm $0.tmp
 # Create the key.pem file
 sudo bash  -c "jq -r '.KeyMaterial' key-output.json > $USERPROFILE/key.pem"
+sudo chmod 700 $USERPROFILE/key.pem 
 
 # === Create a security group
 echo Creating a security Group
