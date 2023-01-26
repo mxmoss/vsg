@@ -151,8 +151,8 @@ ssh -o StrictHostKeyChecking=no -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo yu
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo amazon-linux-extras install nginx1 -y
 echo sudo scp -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
 sudo scp -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
-echo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo sed -i '/octet-stream;/a \\tserver_names_hash_bucket_size 128;' /etc/nginx/nginx.conf
-ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo sed -i '/octet-stream;/a \\tserver_names_hash_bucket_size 128;' /etc/nginx/nginx.conf
+echo sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo sed -i "/octet-stream;/a    server_names_hash_bucket_size 128;" /etc/nginx/nginx.conf
+sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo sed -i "/octet-stream;/a    server_names_hash_bucket_size 128;" /etc/nginx/nginx.conf
 echo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo service nginx start
