@@ -151,7 +151,7 @@ ssh -o StrictHostKeyChecking=no -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo yu
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo amazon-linux-extras install nginx1 -y
 echo sudo scp -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
 sudo scp -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
-#echo sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo sed -i "/octet-stream;/a    server_names_hash_bucket_size 128;" /etc/nginx/nginx.conf
+sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo bash  -c 'sed -i "user nginx/a #user nginx" /etc/nginx/nginx.conf'
 sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo bash  -c 'sed -i "/octet-stream;/a    server_names_hash_bucket_size 128;" /etc/nginx/nginx.conf'
 echo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
@@ -163,5 +163,8 @@ sleep 5
 # start http://$PUB_DNS
 
 # === Start reverse proxy
-echo Starting Reverse Proxy
-echo ssh -i $USERPROFILE/key.pem -R 8080:localhost:8080 ec2-user@$PUB_IP
+echo Reverse proxy is started 
+echo use this key to create a key2.pem file 
+jq -r '.KeyMaterial' key-output.json
+echo and use this comment to connect:
+echo ssh -i key2.pem -R 8080:localhost:8080 ec2-user@$PUB_IP
