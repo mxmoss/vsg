@@ -153,7 +153,7 @@ echo sudo scp -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
 sudo scp -i $USERPROFILE/key.pem server.conf ec2-user@$PUB_IP:/tmp
 echo Editing nginx.conf file
 sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo bash -c \'sed -i \"/user nginx\;/d\" /etc/nginx/nginx.conf\'
-sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo bash  -c 'sed -i "/octet-stream;/a    server_names_hash_bucket_size 128;" /etc/nginx/nginx.conf'
+sudo ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo bash  -c \'sed -i \"/octet-stream\;/a    server_names_hash_bucket_size 128\;\" /etc/nginx/nginx.conf\'
 echo Configuring nginx conf.d
 ssh -i $USERPROFILE/key.pem ec2-user@$PUB_IP sudo mv /tmp/server.conf /etc/nginx/conf.d/
 echo Restarting nginx
