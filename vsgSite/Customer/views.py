@@ -1,18 +1,27 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
+from django.urls import reverse
+from django.views import generic
 from .models import Customer
 from .utils import *
 from django.conf import settings
-from vsgSite.settings import BASE_DIR, STATIC_URL
+#from vsgSite.settings import BASE_DIR, STATIC_URL
 
-def index(request):
-    latest_customer_list = Customer.objects.order_by('-add_date')[:5]
-    context = {'latest_customer_list': latest_customer_list}
-    return render(request, 'Customer/index.html', context)
+class IndexView(generic.ListView):
+    template_name = 'Customer/index.html'
+    context_object_name = 'latest_customer_list'
 
-def detail(request, customer_id):
-    customer = get_object_or_404(Customer, pk=customer_id)
-    return render(request, 'Customer/detail.html', {'customer': customer})
+    def get_queryset(self):
+        return Customer.objects.order_by('-add_date')[:5]
+
+class DetailView(generic.DetailView):
+    model = Customer
+    template_name = 'Customer/detail.html'
+
+class ResultsView(generic.DetailView):
+    model = Customer
+    template_name = 'Customer/results.html'
+
 def spinup(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
     customer_txt = str(customer_id)
