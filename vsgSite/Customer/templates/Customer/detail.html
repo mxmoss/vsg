@@ -20,6 +20,16 @@
     {% csrf_token %}
     License: Basic+Slomo <button type="submit">Launch</button>
     </form>
+    {% if latest_license_list %}
+        <ul>
+        {% for license in latest_license_list %}
+<!--            <li><a href="{% url 'License:detail' license.id %}">{{ license.cust_name }}</a></li> -->
+            <li>{{ license.cust_name }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No licenses are available.</p>
+    {% endif %}
 
 <script>
 function getIPFromAmazon() {

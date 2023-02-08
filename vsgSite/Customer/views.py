@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
-from .models import Customer
+from .models import Customer, License
 from .utils import *
 from django.conf import settings
 #from vsgSite.settings import BASE_DIR, STATIC_URL
@@ -17,6 +17,9 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Customer
     template_name = 'Customer/detail.html'
+#    context_object_name = 'latest_license_list'
+#    def get_queryset(self):
+#        return License.objects.order_by('-add_date')
 
 class ResultsView(generic.DetailView):
     model = Customer
