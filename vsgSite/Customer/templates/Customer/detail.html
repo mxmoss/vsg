@@ -5,13 +5,9 @@
     <title>Customer Detail</title>
 </head>
 <body  onpageshow="getIPFromAmazon()">
-    <h1>{{ customer.custName_text }}</h1>
-    <ul>
-        <li>ID {{ customer.custId_text }}</li>
-        <li>License: {{ customer.licenseId_text }}</li>
-        <li>Added {{ customer.add_date }}</li>
-    </ul>
-    My IP <input type="text" id="myip" name="myip" value=""/>
+    <h2>{{ customer.cust_name }}</h2>
+    Customer since {{ customer.add_date }}<br/>
+    My IP <input type="text" id="myip" name="myip" value=""/><br/>
     <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
     {% csrf_token %}
     License: Basic <button type="submit">Launch</button>
