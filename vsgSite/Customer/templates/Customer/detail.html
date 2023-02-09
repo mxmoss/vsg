@@ -7,29 +7,30 @@
 <body  onpageshow="getIPFromAmazon()">
     <h2>{{ customer.cust_name }}</h2>
     Customer since {{ customer.add_date }}<br/>
-    My IP <input type="text" id="myip" name="myip" value=""/><br/>
     <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
     {% csrf_token %}
-    License: Basic <button type="submit">Launch</button>
-    </form>
-    <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
-    {% csrf_token %}
-    License: Basic2 <button type="submit">Launch</button>
-    </form>
-    <form action="{% url 'Customer:detail' customer.id  %}spinup/" method="POST">
-    {% csrf_token %}
-    License: Basic+Slomo <button type="submit">Launch</button>
-    </form>
-    {% if latest_license_list %}
+
+    <div style="margin-left:20px;margin-top:20px">
+        <h4>Licenses</h4>
         <ul>
-        {% for license in latest_license_list %}
-<!--            <li><a href="{% url 'License:detail' license.id %}">{{ license.cust_name }}</a></li> -->
-            <li>{{ license.cust_name }}</li>
+        {% for lic in customer.license_set.all %}
+            {% if lic.active_ind %}
+            <li><b>#</b> {{lic.license_no}}  {% if lic.license_in_use %}In Use{% else %}Available{% endif %} <i>(Added {{lic.add_date}})</i><br/>
+                <b>Features: </b>
+                {% if lic.replay_ind %}Replay /{% else %}{% endif %}
+                {% if lic.studio_ind %}Studio /{% else %}{% endif %}
+                {% if lic.review_ind %}Review /{% else %}{% endif %}
+                {% if lic.slomo_ind %}Slo-mo /{% else %}{% endif %}
+                {% if lic.dante_ind %}Dante /{% else %}{% endif %}
+                {% if lic.uhd_ind %}UHD {% else %}{% endif %}
+                {% if lic.license_in_use %}<button type="submit">Shut Down</button>{% else %}<button type="submit">Launch</button>{% endif %}
+           </li>
+            {% endif %}
         {% endfor %}
         </ul>
-    {% else %}
-        <p>No licenses are available.</p>
-    {% endif %}
+    </div>
+    Your IP is <input type="text" id="myip" name="myip" value=""/><br/>
+    </form>
 
 <script>
 function getIPFromAmazon() {
