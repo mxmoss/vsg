@@ -1,9 +1,10 @@
 from django.db import models
+from datetime import datetime
 
 class Customer(models.Model):
     cust_id = models.CharField(max_length=100)
     cust_name = models.CharField(max_length=100)
-    add_date = models.DateTimeField('date added')
+    add_date = models.DateTimeField('date added', default=datetime.now, blank=True)
 
 class License(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -16,7 +17,7 @@ class License(models.Model):
     slomo_ind = models.BooleanField()
     dante_ind = models.BooleanField()
     uhd_ind = models.BooleanField()
-    add_date = models.DateTimeField('date added')
+    add_date = models.DateTimeField('date added', default=datetime.now, blank=True)
 
 class Proxy(models.Model):
     license = models.ForeignKey(License, on_delete=models.CASCADE)
@@ -26,7 +27,7 @@ class Proxy(models.Model):
     program_id = models.CharField(max_length=100)
     program_name = models.CharField(max_length=100)
     io_mode = models.CharField(max_length=10)
-    add_date = models.DateTimeField('date added')
+    add_date = models.DateTimeField('date added', default=datetime.now, blank=True)
 
 
 
