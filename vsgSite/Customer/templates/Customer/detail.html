@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Customer Detail</title>
-</head>
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
 <body  onpageshow="getIPFromAmazon()">
     <h2>{{ customer.cust_name }}</h2>
     Customer since {{ customer.add_date }}<br/>
@@ -49,5 +48,5 @@ function myIP() {
 }
 document.getElementById("myip").onload = function() {getIPFromAmazon()};
 </script>
-</body>
-</html>
+
+{% endblock %}
