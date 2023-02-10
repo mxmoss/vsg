@@ -13,7 +13,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'latest_customer_list'
 
     def get_queryset(self):
-        return Customer.objects.order_by('-add_date')[:5]
+        return Customer.objects.all()
 
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Customer
